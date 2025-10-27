@@ -1,0 +1,118 @@
+{
+  "info": {
+    "_postman_id": "b10357e7-33a3-4a55-a6d7-bd7b9c816f32",
+    "name": "Mock Brand Loyalty API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Brands",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "X-API-Key", "value": "test-secret" }],
+        "url": {
+          "raw": "http://localhost:8080/brands",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["brands"]
+        }
+      }
+    },
+    {
+      "name": "Earn Points",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-API-Key", "value": "test-secret" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"akin\",\n  \"points\": 50,\n  \"txnId\": \"txn001\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/brands/kahve/earn",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["brands", "kahve", "earn"]
+        }
+      }
+    },
+    {
+      "name": "Get Balance",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "X-API-Key", "value": "test-secret" }],
+        "url": {
+          "raw": "http://localhost:8080/brands/kahve/users/akin/balance",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["brands", "kahve", "users", "akin", "balance"]
+        }
+      }
+    },
+    {
+      "name": "Redeem Points",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-API-Key", "value": "test-secret" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"akin\",\n  \"points\": 20,\n  \"txnId\": \"txn002\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/brands/kahve/redeem",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["brands", "kahve", "redeem"]
+        }
+      }
+    },
+    {
+      "name": "Void Transaction",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-API-Key", "value": "test-secret" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"txnId\": \"txn001\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/brands/kahve/void",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["brands", "kahve", "void"]
+        }
+      }
+    },
+    {
+      "name": "Webhook: Loyalty Status",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"confirmed\",\n  \"txnId\": \"txn002\",\n  \"points\": 20,\n  \"timestamp\": \"2025-07-14T14:00:00Z\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/webhooks/loyalty",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["webhooks", "loyalty"]
+        }
+      }
+    }
+  ]
+}

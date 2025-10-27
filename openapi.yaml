@@ -1,0 +1,138 @@
+openapi: 3.1.0
+info:
+  title: Mock Brand Loyalty API
+  version: 0.1.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /brands:
+    get:
+      summary: List demo brands
+      operationId: listBrands
+      responses:
+        '200':
+          description: Array of brands
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Brand' }
+
+  /brands/{brandId}/users/{userId}/balance:
+    parameters: [ { $ref: '#/components/parameters/BrandId' },
+                  { $ref: '#/components/parameters/UserId' } ]
+    get:
+      summary: Get user balance
+      operationId: getBalance
+      responses:
+        '200':
+          description: Balance object
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Balance' }
+
+  /brands/{brandId}/earn:
+    parameters: [ { $ref: '#/components/parameters/BrandId' } ]
+    post:
+      summary: Earn points
+      operationId: earnPoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EarnRedeemReq' }
+      responses:
+        '200':
+          description: Earn result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EarnRedeemRes' }
+
+  /brands/{brandId}/redeem:
+    parameters: [ { $ref: '#/components/parameters/BrandId' } ]
+    post:
+      summary: Redeem points
+      operationId: redeemPoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EarnRedeemReq' }
+      responses:
+        '200':
+          description: Redeem result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EarnRedeemRes' }
+
+  /brands/{brandId}/void:
+    parameters: [ { $ref: '#/components/parameters/BrandId' } ]
+    post:
+      summary: Void previous transaction
+      operationId: voidTxn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/VoidReq' }
+      responses:
+        '200':
+          description: Void result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/VoidRes' }
+
+  /webhooks/loyalty:
+    post:
+      summary: Receive async status update
+      operationId: webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WebhookEvent' }
+      responses:
+        '204':
+          description: Accepted
+
+components:
+  parameters:
+    BrandId: { name: brandId, in: path, required: true, schema: { type: string } }
+    UserId:  { name: userId,  in: path, required: true, schema: { type: string } }
+  schemas:
+    Brand:
+      type: object
+      properties: { id: { type: string }, name: { type: string } }
+    Balance:
+      type: object
+      properties:
+        brandId:  { type: string }
+        userId:   { type: string }
+        points:   { type: integer }
+        updatedAt:{ type: string, format: date-time }
+    EarnRedeemReq:
+      type: object
+      required: [userId, points, txnId]
+      properties:
+        userId: { type: string }
+        points: { type: integer, minimum: 1 }
+        txnId:  { type: string }
+    EarnRedeemRes:
+      allOf:
+        - $ref: '#/components/schemas/Balance'
+        - type: object
+          properties: { txnId: { type: string }, status: { type: string } }
+    VoidReq:
+      type: object
+      required: [txnId]
+      properties: { txnId: { type: string } }
+    VoidRes:
+      type: object
+      properties: { voided: { type: boolean }, txnId: { type: string }, status: { type: string } }
+    WebhookEvent:
+      type: object
+      properties:
+        status:    { type: string }
+        txnId:     { type: string }
+        points:    { type: integer }
+        timestamp: { type: string, format: date-time }

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(source:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(curl:*)",
+      "Bash(kill:*)",
+      "Read(//private/tmp/**)",
+      "Bash(pkill:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(tree:*)",
+      "Bash(sqlite3:*)",
+      "Bash(git init:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
